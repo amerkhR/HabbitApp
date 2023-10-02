@@ -15,6 +15,10 @@ const page = {
 	content: {
 		daysContainer: document.getElementById('days'),
 		nextDay: document.querySelector('.habbit__day')
+	},
+	popup: {
+		popUpCover: document.querySelector('.cover'),
+		popUpWind: document.querySelector('.popup')
 	}
 }
 
@@ -120,7 +124,6 @@ function addDays(event) {
 }
 
 function deleteDay(index) {
-	console.log(index)
 	habbits = habbits.map(habbit => {
 		if (habbit.id === globalActiveHabbitId) {
 			habbit.days.splice(index, 1);
@@ -133,6 +136,12 @@ function deleteDay(index) {
 	});
 	rerender(globalActiveHabbitId);
 	saveData();
+}
+
+function togglePopup() {
+	page.popup.popUpCover.classList.contains('cover_hidden') 
+	? page.popup.popUpCover.classList.remove('cover_hidden') 
+	: page.popup.popUpCover.classList.add('cover_hidden')	
 }
 
 /* init */
