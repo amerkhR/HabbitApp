@@ -18,7 +18,7 @@ const page = {
 	},
 	popup: {
 		popUpCover: document.querySelector('.cover'),
-		popUpWind: document.querySelector('.popup')
+		iconField: document.querySelector('.popup__form input[name="icon"]')
 	}
 }
 
@@ -93,6 +93,7 @@ function rerender(activeHabbitId) {
 	if (!activeHabbit) {
 		return;
 	};
+	document.location.replace(document.location.pathname + '#' + activeHabbitId);
 	rerenderMenu(activeHabbit);
 	rerenderHead(activeHabbit);
 	rerenderContent(activeHabbit);
@@ -144,8 +145,44 @@ function togglePopup() {
 	: page.popup.popUpCover.classList.add('cover_hidden')	
 }
 
+function addHabbit(event) {
+	console.log(event)
+	event.preventDefault();
+	const form = event.target;
+	const data = new FormData(form);
+	const name = data.get('name');
+	const target = data.get('target');
+	habbits.push({
+		"id": habbits.length+1,
+		"icon": document.querySelector('.icon.icon_active')['name'],
+		"name": name,
+		"target": target,
+		"days": []
+	})
+	
+	rerender(habbits.length);
+	togglePopup();
+	saveData();
+}
+
+
+/* Working with habbits */
+
+function setIcon(context, icon) {
+	page.popup.iconField.value = icon;
+	const activeIcon = document.querySelector('.icon.icon_active');
+	activeIcon.classList.remove('icon_active');
+	context.classList.add('icon_active')
+}
 /* init */
 (() => {
 	loadData();
-	rerender(habbits[0].id)
+	loadData();
+	const hashId = Number(document.location.hash.replace('#', ''));
+	const urlHabbit = habbits.find(habbit => habbit.id == hashId);
+	if (urlHabbit) {
+		rerender(urlHabbit.id);
+	} else {
+		rerender(habbits[0].id);
+	}
 })();
